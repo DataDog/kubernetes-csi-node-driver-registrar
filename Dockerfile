@@ -5,7 +5,6 @@ FROM $BUILDER_IMAGE AS builder
 WORKDIR /go/src/kubernetes-csi/node-driver-registrar
 ADD . .
 ENV GOTOOLCHAIN auto
-ENV GOFLAGS="-buildvcs=false"
 RUN make build
 
 FROM $BASE_IMAGE
