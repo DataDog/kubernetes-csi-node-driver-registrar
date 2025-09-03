@@ -13,3 +13,10 @@ build-docker-image:
   variables:
     IMAGE_NAME: csi-node-driver-registrar
   extends: .build-docker-image
+
+build-nydus-image:
+  needs: ["build-docker-image"]
+  variables:
+    IMAGE_NAME: csi-node-driver-registrar
+    IMAGE_SUFFIX: ""
+  extends: .build-nydus-image
