@@ -1,0 +1,29 @@
+include: https://gitlab-templates.ddbuild.io/compute-delivery/v3/compute-delivery.yml
+
+test:
+  stage: verify
+  tags: [ "arch:amd64" ]
+  image: registry.ddbuild.io/images/mirror/golang:1.22
+  variables:
+    GOTOOLCHAIN: "auto"
+  script:
+    - make test-go test-vet test-fmt
+
+build-docker-image:
+  variables:
+    IMAGE_NAME: csi-node-driver-registrar
+  extends: .build-docker-image
+
+build-nydus-image:
+  needs: ["build-docker-image"]
+  variables:
+    IMAGE_NAME: csi-node-driver-registrar
+  extends: .build-nydus-image
+
+build-merged-nydus-image:
+  needs: ["build-docker-image"]
+  variables:
+    IMAGE_NAME: csi-node-driver-registrar
+    MERGE_PLATFORM: "true"
+    IMAGE_SUFFIX: "-merged-nydus"
+  extends: .build-nydus-image
